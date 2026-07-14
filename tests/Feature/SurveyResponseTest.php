@@ -153,6 +153,29 @@ class SurveyResponseTest extends TestCase
         $this->assertSame(3, $completed);
     }
 
+    public function test_scale_legend_is_extracted_from_instructions_and_shown_in_form_step(): void
+    {
+        $survey = $this->publishedSurveyWithQuestions();
+        $survey->update([
+            'instructions' => "Escala del 1 al 10.\n\n1-3 indica un desempeño muy por debajo de lo esperado.\n4-6 indica un desempeño aceptable con margen de mejora.\n7-8 indica buen desempeño.\n9-10 indica un desempeño excelente.",
+        ]);
+        $session = $this->sessionFor($survey, 'Juan', ['Carlos']);
+
+        $component = Livewire::test(SurveyResponse::class, ['uuid' => $session->uuid])
+            ->call('start');
+
+        $legend = $component->get('scaleLegend');
+
+        $this->assertCount(4, $legend);
+        $this->assertSame('text-red-600', $legend[0]['color']);
+        $this->assertSame('text-amber-600', $legend[1]['color']);
+        $this->assertSame('text-indigo-600', $legend[2]['color']);
+        $this->assertSame('text-emerald-600', $legend[3]['color']);
+
+        $component->assertSee('Escala de valoración');
+        $component->assertSee('9-10 indica un desempeño excelente.');
+    }
+
     public function test_required_question_is_validated(): void
     {
         $survey = $this->publishedSurveyWithQuestions();

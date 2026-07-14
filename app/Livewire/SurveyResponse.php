@@ -84,6 +84,37 @@ class SurveyResponse extends Component
         return $this->session->evaluations->count();
     }
 
+    /**
+     * @return array<int, array{text: string, color: string}>
+     */
+    #[Computed]
+    public function scaleLegend(): array
+    {
+        $instructions = $this->session->survey->instructions;
+
+        if (blank($instructions)) {
+            return [];
+        }
+
+        $legend = [];
+
+        foreach (explode("\n", $instructions) as $line) {
+            $color = match (true) {
+                str_contains($line, 'muy por debajo') => 'text-red-600',
+                str_contains($line, 'aceptable') => 'text-amber-600',
+                str_contains($line, 'buen desempeño') => 'text-indigo-600',
+                str_contains($line, 'excelente') => 'text-emerald-600',
+                default => null,
+            };
+
+            if ($color) {
+                $legend[] = ['text' => trim($line), 'color' => $color];
+            }
+        }
+
+        return $legend;
+    }
+
     private function resolveStep(): void
     {
         $pending = $this->session->evaluations->firstWhere('status', EvaluationStatus::Pending);

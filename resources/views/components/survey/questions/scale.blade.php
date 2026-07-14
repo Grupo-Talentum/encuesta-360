@@ -13,10 +13,12 @@ use App\Enums\QuestionType;
 <div class="flex flex-wrap gap-2">
     @foreach (range($min, $max) as $value)
         @php
-            $fraction = ($value - $min) / max($max - $min, 1);
+            // Mismos cortes que la leyenda de la escala (1-3 rojo, 4-6 ambar, 7-8 indigo, 9-10 verde).
+            $position = ($value - $min + 1) / ($max - $min + 1);
             $selectedClasses = match (true) {
-                $fraction < 0.4 => 'peer-checked:border-red-500 peer-checked:bg-red-500',
-                $fraction < 0.7 => 'peer-checked:border-amber-500 peer-checked:bg-amber-500',
+                $position <= 0.3 => 'peer-checked:border-red-500 peer-checked:bg-red-500',
+                $position <= 0.6 => 'peer-checked:border-amber-500 peer-checked:bg-amber-500',
+                $position <= 0.8 => 'peer-checked:border-indigo-500 peer-checked:bg-indigo-500',
                 default => 'peer-checked:border-emerald-500 peer-checked:bg-emerald-500',
             };
         @endphp

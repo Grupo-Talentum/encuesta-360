@@ -30,7 +30,7 @@ class SurveySeeder extends Seeder
         $survey = Survey::create([
             'title' => 'Encuesta 360 de Colaboración',
             'description' => 'Evaluación de colaboración entre áreas para identificar fortalezas y oportunidades de mejora.',
-            'instructions' => "Objetivo: evaluar la colaboración de la persona indicada con tu área durante el último periodo.\n\nEscala: cada pregunta se responde del 1 (mínimo) al 10 (máximo).\n\n1-3 indica un desempeño muy por debajo de lo esperado. 4-6 indica un desempeño aceptable con margen de mejora. 7-8 indica buen desempeño. 9-10 indica un desempeño excelente.\n\nRecomendaciones: respondé con la mayor sinceridad posible, pensando en hechos concretos de los últimos meses.\n\nNota: usá toda la escala disponible, evitá concentrar todas las respuestas en los mismos valores.\n\n¡Gracias por tu tiempo y tu honestidad!",
+            'instructions' => "Objetivo: evaluar la colaboración de la persona indicada con tu área durante el último periodo.\n\nEscala: cada pregunta se responde del 1 (mínimo) al 10 (máximo).\n\n1-3 indica un desempeño muy por debajo de lo esperado.\n4-6 indica un desempeño aceptable con margen de mejora.\n7-8 indica buen desempeño.\n9-10 indica un desempeño excelente.\n\nRecomendaciones: respondé con la mayor sinceridad posible, pensando en hechos concretos de los últimos meses.\n\nNota: usá toda la escala disponible, evitá concentrar todas las respuestas en los mismos valores.\n\n¡Gracias por tu tiempo y tu honestidad!",
             'start_message' => 'A continuación vas a evaluar a la persona indicada. La encuesta toma unos 5 minutos.',
             'end_message' => 'Gracias por completar la evaluación. Tu respuesta fue registrada correctamente.',
         ]);
