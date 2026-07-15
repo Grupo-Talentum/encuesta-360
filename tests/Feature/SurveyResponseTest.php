@@ -219,11 +219,15 @@ class SurveyResponseTest extends TestCase
     {
         $survey = $this->publishedSurveyWithQuestions();
         $session = $this->sessionFor($survey, 'Juan', ['Carlos']);
+        $question = SurveyQuestion::where('title', 'Comunica bien?')->first();
 
-        Livewire::test(SurveyResponse::class, ['uuid' => $session->uuid])
+        $component = Livewire::test(SurveyResponse::class, ['uuid' => $session->uuid])
             ->call('start')
             ->call('submit')
-            ->assertHasErrors();
+            ->assertHasErrors(["answers.{$question->id}" => 'required']);
+
+        $message = $component->errors()->first("answers.{$question->id}");
+        $this->assertSame('El campo Comunica bien? es obligatorio.', $message);
 
         $this->assertSame(EvaluationStatus::Pending, $session->evaluations->first()->fresh()->status);
     }

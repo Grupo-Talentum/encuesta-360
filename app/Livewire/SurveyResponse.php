@@ -176,6 +176,22 @@ class SurveyResponse extends Component
     }
 
     /**
+     * @return array<string, string>
+     */
+    protected function validationAttributes(): array
+    {
+        $attributes = [];
+
+        foreach ($this->session->survey->sections as $section) {
+            foreach ($section->questions as $question) {
+                $attributes["answers.{$question->id}"] = $question->title;
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private function rulesForQuestion(SurveyQuestion $question): array
