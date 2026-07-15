@@ -6,4 +6,5 @@ enum EvaluationStatus: string
 {
     case Pending = 'pending';
     case Completed = 'completed';
+    case Skipped = 'skipped';
 }

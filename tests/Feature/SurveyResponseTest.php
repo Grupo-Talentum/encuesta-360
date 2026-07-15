@@ -176,6 +176,45 @@ class SurveyResponseTest extends TestCase
         $component->assertSee('9-10 indica un desempeño excelente.');
     }
 
+    public function test_skip_marks_evaluation_as_skipped_and_advances_without_answers(): void
+    {
+        $survey = $this->publishedSurveyWithQuestions();
+        $session = $this->sessionFor($survey, 'Juan', ['Pedro', 'Carlos']);
+
+        $component = Livewire::test(SurveyResponse::class, ['uuid' => $session->uuid])
+            ->call('start')
+            ->assertSet('step', 'form');
+
+        $this->assertSame('Pedro', $component->get('currentEvaluation')->evaluatee->name);
+
+        $component
+            ->call('skip')
+            ->assertHasNoErrors()
+            ->assertSet('step', 'form')
+            ->assertDispatched('survey-scroll-top');
+
+        $this->assertSame('Carlos', $component->get('currentEvaluation')->evaluatee->name);
+
+        $pedroEvaluation = $session->evaluations()->whereHas('evaluatee', fn ($q) => $q->where('name', 'Pedro'))->first();
+        $this->assertSame(EvaluationStatus::Skipped, $pedroEvaluation->status);
+        $this->assertNotNull($pedroEvaluation->completed_at);
+        $this->assertSame(0, $pedroEvaluation->answers()->count());
+    }
+
+    public function test_skipping_all_evaluations_reaches_done_state(): void
+    {
+        $survey = $this->publishedSurveyWithQuestions();
+        $session = $this->sessionFor($survey, 'Juan', ['Pedro', 'Carlos']);
+
+        Livewire::test(SurveyResponse::class, ['uuid' => $session->uuid])
+            ->call('start')
+            ->call('skip')
+            ->call('skip')
+            ->assertSet('step', 'done');
+
+        $this->assertSame(2, $session->evaluations()->where('status', EvaluationStatus::Skipped)->count());
+    }
+
     public function test_required_question_is_validated(): void
     {
         $survey = $this->publishedSurveyWithQuestions();

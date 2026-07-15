@@ -67,6 +67,7 @@ class SurveyResultsTest extends TestCase
 
         $this->assertSame(3, $results['total']);
         $this->assertSame(2, $results['completed']);
+        $this->assertSame(0, $results['skipped']);
         $this->assertSame(1, $results['pending']);
         $this->assertSame(66.7, $results['participation']);
 
@@ -81,6 +82,31 @@ class SurveyResultsTest extends TestCase
 
         $this->assertCount(1, $results['comments']);
         $this->assertSame('Muy buen trabajo', $results['comments']->first()['text']);
+    }
+
+    public function test_skipped_evaluations_are_excluded_from_pending_and_averages(): void
+    {
+        $survey = $this->buildScenario();
+
+        $ana = Employee::where('name', 'Ana')->first();
+        $luis = Employee::create(['name' => 'Luis', 'email' => 'luis@test.com']);
+
+        Evaluation::create([
+            'survey_id' => $survey->id,
+            'evaluator_id' => $ana->id,
+            'evaluatee_id' => $luis->id,
+            'status' => EvaluationStatus::Skipped,
+            'completed_at' => now(),
+        ]);
+
+        $results = app(GetSurveyResultsAction::class)->execute($survey);
+
+        $this->assertSame(4, $results['total']);
+        $this->assertSame(2, $results['completed']);
+        $this->assertSame(1, $results['skipped']);
+        $this->assertSame(1, $results['pending']);
+
+        $this->assertNull($results['employeeAverages']->firstWhere('employee.name', 'Luis'));
     }
 
     public function test_results_page_loads(): void

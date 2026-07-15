@@ -33,6 +33,18 @@
             default => $value,
         };
     };
+
+    $statusLabel = fn (string $status) => match ($status) {
+        'completed' => 'Completada',
+        'skipped' => 'Omitida',
+        default => 'Pendiente',
+    };
+
+    $statusColor = fn (string $status) => match ($status) {
+        'completed' => 'success',
+        'skipped' => 'gray',
+        default => 'warning',
+    };
 @endphp
 
 @vite(['resources/css/app.css'])
@@ -70,7 +82,7 @@
         {{-- Resumen --}}
         <div x-show="tab === 'summary'" class="mt-6 space-y-6">
             <x-filament::section heading="Participación">
-                <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                     <div class="rounded-xl bg-gray-50 p-4">
                         <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Total evaluaciones</p>
                         <p class="mt-1 text-3xl font-bold text-gray-900">{{ $results['total'] }}</p>
@@ -78,6 +90,10 @@
                     <div class="rounded-xl bg-emerald-50 p-4">
                         <p class="text-xs font-medium uppercase tracking-wide text-emerald-700">Completadas</p>
                         <p class="mt-1 text-3xl font-bold text-emerald-700">{{ $results['completed'] }}</p>
+                    </div>
+                    <div class="rounded-xl bg-gray-100 p-4">
+                        <p class="text-xs font-medium uppercase tracking-wide text-gray-600">Omitidas</p>
+                        <p class="mt-1 text-3xl font-bold text-gray-600">{{ $results['skipped'] }}</p>
                     </div>
                     <div class="rounded-xl bg-amber-50 p-4">
                         <p class="text-xs font-medium uppercase tracking-wide text-amber-700">Pendientes</p>
@@ -188,12 +204,14 @@
                                             <div class="rounded-lg bg-gray-50 p-3">
                                                 <div class="flex items-center justify-between">
                                                     <p class="text-sm font-medium text-gray-900">Evaluado por {{ $evaluation->evaluator->name }}</p>
-                                                    <x-filament::badge :color="$evaluation->status->value === 'completed' ? 'success' : 'warning'">
-                                                        {{ $evaluation->status->value === 'completed' ? 'Completada' : 'Pendiente' }}
+                                                    <x-filament::badge :color="$statusColor($evaluation->status->value)">
+                                                        {{ $statusLabel($evaluation->status->value) }}
                                                     </x-filament::badge>
                                                 </div>
 
-                                                @if ($evaluation->answers->isEmpty())
+                                                @if ($evaluation->status->value === 'skipped')
+                                                    <p class="mt-2 text-sm text-gray-400">Marcada como "no trabajé con esta persona".</p>
+                                                @elseif ($evaluation->answers->isEmpty())
                                                     <p class="mt-2 text-sm text-gray-400">Sin respuestas todavía.</p>
                                                 @else
                                                     <dl class="mt-3 space-y-2">

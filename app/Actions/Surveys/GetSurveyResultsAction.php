@@ -12,6 +12,7 @@ class GetSurveyResultsAction
      * @return array{
      *     total: int,
      *     completed: int,
+     *     skipped: int,
      *     pending: int,
      *     participation: float,
      *     questionAverages: \Illuminate\Support\Collection,
@@ -92,6 +93,7 @@ class GetSurveyResultsAction
 
         $total = $evaluations->count();
         $completed = $completedEvaluations->count();
+        $skipped = $evaluations->where('status', EvaluationStatus::Skipped)->count();
 
         $evaluationsByEvaluatee = $evaluations
             ->groupBy('evaluatee_id')
@@ -105,7 +107,8 @@ class GetSurveyResultsAction
         return [
             'total' => $total,
             'completed' => $completed,
-            'pending' => $total - $completed,
+            'skipped' => $skipped,
+            'pending' => $total - $completed - $skipped,
             'participation' => $total > 0 ? round($completed / $total * 100, 1) : 0.0,
             'questionAverages' => $questionAverages,
             'employeeAverages' => $employeeAverages,

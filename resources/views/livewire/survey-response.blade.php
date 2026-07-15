@@ -77,13 +77,13 @@
             <div class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
                 <div class="flex items-center justify-between">
                     <h1 class="text-lg font-bold text-slate-900">{{ $session->survey->title }}</h1>
-                    <span class="text-xs font-medium text-slate-400">{{ $this->completedCount + 1 }} de {{ $this->totalCount }}</span>
+                    <span class="text-xs font-medium text-slate-400">{{ $this->resolvedCount + 1 }} de {{ $this->totalCount }}</span>
                 </div>
                 <p class="mt-1 text-sm text-slate-500">
                     Evaluando a <span class="font-medium text-slate-700">{{ $this->currentEvaluation->evaluatee->name }}</span>
                 </p>
                 <div class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                    <div class="h-full rounded-full bg-indigo-600 transition-all" style="width: {{ $this->totalCount > 0 ? ($this->completedCount / $this->totalCount * 100) : 0 }}%"></div>
+                    <div class="h-full rounded-full bg-indigo-600 transition-all" style="width: {{ $this->totalCount > 0 ? ($this->resolvedCount / $this->totalCount * 100) : 0 }}%"></div>
                 </div>
             </div>
 
@@ -113,7 +113,16 @@
                 type="submit"
                 class="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3.5 font-semibold text-white shadow-sm shadow-indigo-200 transition hover:bg-indigo-700 active:scale-[.99]"
             >
-                {{ $this->completedCount + 1 === $this->totalCount ? 'Enviar y finalizar' : 'Siguiente evaluación' }}
+                {{ $this->resolvedCount + 1 === $this->totalCount ? 'Enviar y finalizar' : 'Siguiente evaluación' }}
+            </button>
+
+            <button
+                type="button"
+                wire:click="skip"
+                onclick="return confirm('¿Confirmás que no trabajaste con {{ $this->currentEvaluation->evaluatee->name }} y querés omitir esta evaluación?')"
+                class="mt-3 w-full text-center text-sm text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-700"
+            >
+                No he trabajado con esta persona — omitir evaluación
             </button>
         </form>
 

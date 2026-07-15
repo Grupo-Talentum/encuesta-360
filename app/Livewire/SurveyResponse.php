@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Actions\Evaluations\SkipEvaluationAction;
 use App\Actions\Evaluations\SubmitEvaluationAction;
 use App\Enums\EvaluationStatus;
 use App\Enums\QuestionType;
@@ -66,6 +67,20 @@ class SurveyResponse extends Component
         $this->dispatch('survey-scroll-top');
     }
 
+    public function skip(): void
+    {
+        $evaluation = $this->session->evaluations->firstWhere('id', $this->currentEvaluationId);
+
+        app(SkipEvaluationAction::class)->execute($evaluation);
+
+        $this->answers = [];
+        $this->resetValidation();
+        $this->session->refresh();
+        $this->session->load('evaluations');
+        $this->resolveStep();
+        $this->dispatch('survey-scroll-top');
+    }
+
     #[Computed]
     public function currentEvaluation(): ?Evaluation
     {
@@ -76,6 +91,18 @@ class SurveyResponse extends Component
     public function completedCount(): int
     {
         return $this->session->evaluations->where('status', EvaluationStatus::Completed)->count();
+    }
+
+    #[Computed]
+    public function skippedCount(): int
+    {
+        return $this->session->evaluations->where('status', EvaluationStatus::Skipped)->count();
+    }
+
+    #[Computed]
+    public function resolvedCount(): int
+    {
+        return $this->completedCount + $this->skippedCount;
     }
 
     #[Computed]
@@ -127,7 +154,7 @@ class SurveyResponse extends Component
         }
 
         $this->currentEvaluationId = $pending->id;
-        $this->step = $this->completedCount > 0 ? 'form' : 'intro';
+        $this->step = $this->resolvedCount > 0 ? 'form' : 'intro';
     }
 
     /**
