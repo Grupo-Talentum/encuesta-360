@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }}</title>
 </head>
-<body style="margin:0; padding:0; background-color:#eef2ff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#eef2ff; padding:32px 16px;">
+<body style="margin:0; padding:0; background-color:#8e879f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#8e879f; padding:32px 16px;">
         <tr>
             <td align="center">
                 <table role="presentation" width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
@@ -58,7 +58,7 @@
                     </tr>
                     <tr>
                         <td align="center" style="padding-top:24px;">
-                            <p style="margin:0; font-size:12px; color:#a1a1aa;">
+                            <p style="margin:0; font-size:12px; color:#c7c7d9;">
                                 © {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.
                             </p>
                         </td>
