@@ -24,6 +24,7 @@ class EvaluationInvitationNotification extends Notification implements ShouldQue
 
     public function toMail(Employee $notifiable): EvaluationInvitationMail
     {
-        return new EvaluationInvitationMail($this->session, $notifiable);
+        return (new EvaluationInvitationMail($this->session, $notifiable))
+            ->to($notifiable->email, $notifiable->name);
     }
 }
