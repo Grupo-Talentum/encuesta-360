@@ -3,6 +3,7 @@
 namespace App\Actions\Surveys;
 
 use App\Enums\SurveyStatus;
+use App\Enums\SurveyType;
 use App\Models\Survey;
 use Illuminate\Support\Facades\DB;
 
@@ -14,12 +15,17 @@ class DuplicateSurveyAction
             $copy = Survey::create([
                 'title' => "{$survey->title} (copia)",
                 'team_id' => $teamId,
+                'type' => $survey->type,
                 'description' => $survey->description,
                 'instructions' => $survey->instructions,
                 'start_message' => $survey->start_message,
                 'end_message' => $survey->end_message,
                 'status' => SurveyStatus::Draft,
             ]);
+
+            if ($survey->type === SurveyType::TeamsToTeam) {
+                $copy->evaluatorTeams()->sync($survey->evaluatorTeams()->pluck('teams.id'));
+            }
 
             foreach ($survey->sections as $section) {
                 $newSection = $copy->sections()->create([

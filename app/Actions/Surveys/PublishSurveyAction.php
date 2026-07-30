@@ -4,6 +4,7 @@ namespace App\Actions\Surveys;
 
 use App\Enums\RelationType;
 use App\Enums\SurveyStatus;
+use App\Enums\SurveyType;
 use App\Exceptions\SurveyCannotBePublishedException;
 use App\Models\EmployeeRelation;
 use App\Models\Evaluation;
@@ -17,6 +18,10 @@ class PublishSurveyAction
 {
     public function execute(Survey $survey): void
     {
+        if ($survey->type === SurveyType::TeamsToTeam) {
+            app(SyncTeamsToTeamRelationsAction::class)->execute($survey);
+        }
+
         $this->validate($survey);
 
         $sessions = DB::transaction(function () use ($survey) {
@@ -53,12 +58,32 @@ class PublishSurveyAction
 
     private function relationsFor(Survey $survey): Collection
     {
-        return EmployeeRelation::query()
-            ->when(
-                $survey->team_id,
-                fn ($query) => $query->whereHas('employee', fn ($q) => $q->where('team_id', $survey->team_id))
-            )
+        return match ($survey->type) {
+            SurveyType::TeamsToTeam => $this->teamsToTeamRelationsFor($survey),
+            default => EmployeeRelation::query()
+                ->when(
+                    $survey->team_id,
+                    fn ($query) => $query->whereHas('employee', fn ($q) => $q->where('team_id', $survey->team_id))
+                )
+                ->get(),
+        };
+    }
+
+    private function teamsToTeamRelationsFor(Survey $survey): Collection
+    {
+        $internal = EmployeeRelation::query()
+            ->whereHas('employee', fn ($q) => $q->where('team_id', $survey->team_id))
             ->get();
+
+        $evaluatorTeamIds = $survey->evaluatorTeams()->pluck('teams.id');
+
+        $crossTeam = EmployeeRelation::query()
+            ->where('type', RelationType::TeamsToTeam)
+            ->whereHas('employee', fn ($q) => $q->whereIn('team_id', $evaluatorTeamIds))
+            ->whereHas('relatedEmployee', fn ($q) => $q->where('team_id', $survey->team_id))
+            ->get();
+
+        return $internal->concat($crossTeam);
     }
 
     private function validate(Survey $survey): void
@@ -73,6 +98,16 @@ class PublishSurveyAction
 
         if ($survey->questions()->count() === 0) {
             throw new SurveyCannotBePublishedException('La encuesta no tiene preguntas.');
+        }
+
+        if ($survey->type === SurveyType::TeamsToTeam) {
+            if (! $survey->team_id) {
+                throw new SurveyCannotBePublishedException('Debe seleccionar el equipo evaluado.');
+            }
+
+            if ($survey->evaluatorTeams()->count() === 0) {
+                throw new SurveyCannotBePublishedException('Debe seleccionar al menos un equipo evaluador.');
+            }
         }
 
         if ($this->relationsFor($survey)->isEmpty()) {

@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\SurveyStatus;
+use App\Enums\SurveyType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
@@ -15,11 +17,13 @@ class Survey extends Model
 
     protected $attributes = [
         'status' => SurveyStatus::Draft->value,
+        'type' => SurveyType::Global->value,
     ];
 
     protected $fillable = [
         'title',
         'team_id',
+        'type',
         'description',
         'instructions',
         'start_message',
@@ -33,6 +37,7 @@ class Survey extends Model
     {
         return [
             'status' => SurveyStatus::class,
+            'type' => SurveyType::class,
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
         ];
@@ -41,6 +46,11 @@ class Survey extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function evaluatorTeams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, 'survey_evaluator_team');
     }
 
     public function sections(): HasMany

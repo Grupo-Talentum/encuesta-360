@@ -21,6 +21,8 @@ class TeamResource extends Resource
 
     protected static ?string $navigationLabel = 'Equipos';
 
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $modelLabel = 'equipo';
 
     protected static ?string $pluralModelLabel = 'equipos';

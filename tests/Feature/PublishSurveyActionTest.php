@@ -6,6 +6,7 @@ use App\Actions\Surveys\PublishSurveyAction;
 use App\Enums\QuestionType;
 use App\Enums\RelationType;
 use App\Enums\SurveyStatus;
+use App\Enums\SurveyType;
 use App\Exceptions\SurveyCannotBePublishedException;
 use App\Models\Employee;
 use App\Models\EmployeeRelation;
@@ -172,5 +173,66 @@ class PublishSurveyActionTest extends TestCase
 
         Notification::assertSentTo($juan, EvaluationInvitationNotification::class);
         Notification::assertNotSentTo($luis, EvaluationInvitationNotification::class);
+    }
+
+    public function test_teams_to_team_survey_rejects_without_evaluator_teams(): void
+    {
+        $team = Team::create(['name' => 'Producto']);
+        $survey = $this->surveyWithSectionAndQuestion();
+        $survey->update(['type' => SurveyType::TeamsToTeam, 'team_id' => $team->id]);
+
+        $this->expectExceptionMessage('Debe seleccionar al menos un equipo evaluador.');
+
+        app(PublishSurveyAction::class)->execute($survey);
+    }
+
+    public function test_teams_to_team_survey_generates_cross_team_and_internal_evaluations(): void
+    {
+        Notification::fake();
+
+        $evaluated = Team::create(['name' => 'Producto']);
+        $evaluatorTeam = Team::create(['name' => 'Ventas']);
+        $otherTeam = Team::create(['name' => 'Soporte']);
+
+        $juan = Employee::create(['name' => 'Juan', 'email' => 'juan@test.com', 'team_id' => $evaluated->id]);
+        $carlos = Employee::create(['name' => 'Carlos', 'email' => 'carlos@test.com', 'team_id' => $evaluated->id]);
+        $luis = Employee::create(['name' => 'Luis', 'email' => 'luis@test.com', 'team_id' => $evaluatorTeam->id]);
+        $ana = Employee::create(['name' => 'Ana', 'email' => 'ana@test.com', 'team_id' => $otherTeam->id]);
+
+        EmployeeRelation::create(['employee_id' => $juan->id, 'related_employee_id' => $carlos->id, 'type' => RelationType::Peer]);
+
+        $survey = $this->surveyWithSectionAndQuestion();
+        $survey->update(['type' => SurveyType::TeamsToTeam, 'team_id' => $evaluated->id]);
+        $survey->evaluatorTeams()->sync([$evaluatorTeam->id]);
+
+        app(PublishSurveyAction::class)->execute($survey);
+
+        // Interna: Juan sigue evaluando a Carlos dentro del equipo evaluado.
+        $this->assertDatabaseHas('evaluations', [
+            'survey_id' => $survey->id,
+            'evaluator_id' => $juan->id,
+            'evaluatee_id' => $carlos->id,
+        ]);
+
+        // Cruzada: Luis (equipo evaluador) evalúa a Juan y Carlos (equipo evaluado).
+        $this->assertDatabaseHas('evaluations', [
+            'survey_id' => $survey->id,
+            'evaluator_id' => $luis->id,
+            'evaluatee_id' => $juan->id,
+        ]);
+        $this->assertDatabaseHas('evaluations', [
+            'survey_id' => $survey->id,
+            'evaluator_id' => $luis->id,
+            'evaluatee_id' => $carlos->id,
+        ]);
+
+        // Ana (equipo no evaluador) no participa.
+        $this->assertDatabaseMissing('evaluations', [
+            'survey_id' => $survey->id,
+            'evaluator_id' => $ana->id,
+        ]);
+
+        Notification::assertSentTo($luis, EvaluationInvitationNotification::class);
+        Notification::assertNotSentTo($ana, EvaluationInvitationNotification::class);
     }
 }
