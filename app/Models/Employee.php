@@ -14,7 +14,7 @@ class Employee extends Model
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'email', 'team_id', 'superior_id'];
+    protected $fillable = ['name', 'position', 'company', 'email', 'team_id', 'superior_id'];
 
     private ?int $previousSuperiorId = null;
 

@@ -43,6 +43,12 @@ class EmployeeResource extends Resource
                 ->required()
                 ->unique(ignoreRecord: true)
                 ->maxLength(255),
+            TextInput::make('position')
+                ->label('Puesto')
+                ->maxLength(255),
+            TextInput::make('company')
+                ->label('Empresa')
+                ->maxLength(255),
             Select::make('team_id')
                 ->label('Equipo')
                 ->relationship('team', 'name')
@@ -68,6 +74,8 @@ class EmployeeResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Nombre')->searchable(),
                 TextColumn::make('email')->label('Email')->searchable(),
+                TextColumn::make('position')->label('Puesto')->searchable()->placeholder('—'),
+                TextColumn::make('company')->label('Empresa')->searchable()->placeholder('—'),
                 TextColumn::make('team.name')->label('Equipo')->sortable(),
                 TextColumn::make('reportsTo.name')->label('Reporta a')->placeholder('—'),
             ])

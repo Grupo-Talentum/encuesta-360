@@ -19,7 +19,7 @@
                         <td style="background-color:#ffffff; border:1px solid #e4e4e7; border-radius:12px; box-shadow:0 1px 3px rgba(15,44,82,0.06); overflow:hidden;">
                             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                                 <tr>
-                                    <td style="height:6px; background:linear-gradient(90deg,#159895 0%,#2dd4bf 70%,#0f2c52 100%); font-size:0; line-height:0;">&nbsp;</td>
+                                    <td style="height:6px; background-color:#159895; font-size:0; line-height:0;">&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:32px;">
@@ -65,7 +65,7 @@
                                             Listening. Learning. Improving.
                                         </p>
                                         <p style="margin:0; font-size:13px; line-height:1.5; color:#a1a1aa;">
-                                            Si los botones no funcionan, respondé desde este enlace: <a href="{{ $scoreLinks[10] }}" style="color:#159895;">calificar con 10</a> (o reemplazá el número al final del enlace por tu puntaje).
+                                            ¿No puedes utilizar los botones? Puedes compartir tu experiencia desde este enlace: <a href="{{ $scoreLinks[10] }}" style="color:#159895;">Visualizar en el navegador</a>.
                                         </p>
                                     </td>
                                 </tr>

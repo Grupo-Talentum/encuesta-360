@@ -18,7 +18,7 @@
         <x-survey.step-indicator :step="$step" />
 
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div class="h-2 bg-gradient-to-r from-indigo-500 to-violet-500"></div>
+            <div class="h-2 bg-indigo-600"></div>
 
             <div class="p-8 sm:p-10">
                 <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">
@@ -105,9 +105,9 @@
                     class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
                 >
                     <div x-show="confirmSkip" x-transition class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
-                        <h2 class="text-lg font-bold text-slate-900">¿Omitir esta evaluación?</h2>
+                        <h2 class="text-lg font-bold text-slate-900">¿Omitir?</h2>
                         <p class="mt-2 text-sm text-slate-500">
-                            Confirmás que no tenés suficiente experiencia de colaboración con <span class="font-medium text-slate-700">{{ $this->currentEvaluation->evaluatee->name }}</span> y querés omitir esta evaluación.
+                            Confirmás que no tenés suficiente experiencia de colaboración con <span class="font-medium text-slate-700">{{ $this->currentEvaluation->evaluatee->name }}</span>.
                         </p>
                         <div class="mt-6 flex justify-end gap-3">
                             <button type="button" x-on:click="confirmSkip = false" class="text-sm font-medium text-slate-500 hover:text-slate-600">
@@ -151,7 +151,7 @@
                 type="submit"
                 class="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3.5 font-semibold text-white shadow-sm shadow-indigo-200 transition hover:bg-indigo-700 active:scale-[.99]"
             >
-                {{ $this->resolvedCount + 1 === $this->totalCount ? 'Enviar y finalizar' : 'Siguiente evaluación' }}
+                {{ $this->resolvedCount + 1 === $this->totalCount ? 'Enviar y finalizar' : 'Siguiente' }}
             </button>
         </form>
 
@@ -193,7 +193,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
             </div>
-            <h1 class="mt-5 text-xl font-semibold text-slate-900">¡Gracias!</h1>
+            <h1 class="mt-5 text-xl font-semibold text-slate-900">¡Gracias por tu tiempo!</h1>
             @if ($session->survey->end_message)
                 <p class="mt-2 whitespace-pre-line text-slate-600">{{ $session->survey->end_message }}</p>
             @else

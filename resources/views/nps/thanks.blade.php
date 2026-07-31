@@ -9,7 +9,7 @@
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 text-slate-900 antialiased">
     <div class="mx-auto max-w-lg px-4 py-16">
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div class="h-2 bg-gradient-to-r from-indigo-500 to-violet-500"></div>
+            <div class="h-2 bg-indigo-600"></div>
             <div class="p-8 text-center sm:p-10">
                 <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-7 w-7">
