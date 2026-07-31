@@ -16,7 +16,7 @@
                 <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Talentum Voice</p>
                 <h1 class="mt-4 text-lg font-bold text-slate-900">{{ $response->npsSurvey->question }}</h1>
 
-                <div class="mt-6 flex gap-1 overflow-x-auto">
+                <div class="mt-6 flex justify-center gap-1 overflow-x-auto">
                     @foreach (range(0, 10) as $score)
                         <a
                             href="{{ route('nps.respond', ['token' => $response->token, 'score' => $score]) }}"
