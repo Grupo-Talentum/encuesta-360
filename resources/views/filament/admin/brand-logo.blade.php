@@ -1,7 +1,1 @@
-<div class="encuesta360-brand">
-    <span class="encuesta360-brand-word">Encuesta</span>
-    <span class="encuesta360-brand-badge">
-        360
-        <i></i>
-    </span>
-</div>
+<img src="{{ asset('images/talentum_voice.png') }}" alt="{{ config('app.name') }}" class="talentum-voice-logo">

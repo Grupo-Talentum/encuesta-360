@@ -1,11 +1,11 @@
 @php
     $slides = [
-        'radial-gradient(circle at 20% 20%, oklch(0.85 0.12 292), transparent 55%), radial-gradient(circle at 80% 80%, oklch(0.8 0.1 265), transparent 55%), oklch(0.97 0.01 292)',
-        'linear-gradient(135deg, oklch(0.82 0.13 300), oklch(0.88 0.1 250) 60%, oklch(0.95 0.02 292))',
-        'radial-gradient(circle at 75% 30%, oklch(0.86 0.12 20), transparent 50%), radial-gradient(circle at 25% 75%, oklch(0.82 0.13 292), transparent 55%), oklch(0.97 0.01 280)',
-        'linear-gradient(160deg, oklch(0.35 0.05 265), oklch(0.55 0.12 292) 55%, oklch(0.8 0.1 300))',
-        'radial-gradient(circle at 30% 70%, oklch(0.85 0.13 160), transparent 50%), radial-gradient(circle at 70% 20%, oklch(0.82 0.12 292), transparent 55%), oklch(0.97 0.01 200)',
-        'linear-gradient(120deg, oklch(0.88 0.08 80), oklch(0.85 0.1 292) 60%, oklch(0.9 0.06 265))',
+        'radial-gradient(circle at 20% 20%, #a6ede7, transparent 55%), radial-gradient(circle at 80% 80%, #b9cde6, transparent 55%), #f0fdfb',
+        'linear-gradient(135deg, #6cded6, #8aabd2 60%, #eef3f9)',
+        'radial-gradient(circle at 75% 30%, #99f6e4, transparent 50%), radial-gradient(circle at 25% 75%, #b9cde6, transparent 55%), #f0fdfb',
+        'linear-gradient(160deg, #0f2c52, #159895 55%, #6cded6)',
+        'radial-gradient(circle at 30% 70%, #5eead4, transparent 50%), radial-gradient(circle at 70% 20%, #8aabd2, transparent 55%), #ecfdfb',
+        'linear-gradient(120deg, #d1f7f3, #a6ede7 60%, #dbe6f2)',
     ];
 @endphp
 

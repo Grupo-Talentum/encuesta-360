@@ -27,14 +27,14 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('Encuesta360')
+            ->brandName('Talentum Voice')
             ->brandLogo(fn () => view('filament.admin.brand-logo'))
             ->brandLogoHeight('auto')
             ->favicon(asset('favicon.ico'))
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->sidebarWidth('16rem')
             ->colors([
-                'primary' => Color::Violet,
+                'primary' => Color::hex('#159895'),
                 'danger' => Color::Rose,
             ])
             ->renderHook(
