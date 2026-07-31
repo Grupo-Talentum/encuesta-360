@@ -7,7 +7,9 @@
     @vite(['resources/css/app.css'])
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 text-slate-900 antialiased">
-    <div class="mx-auto max-w-lg px-4 py-16">
+    <div class="mx-auto max-w-2xl px-4 py-16">
+        <img src="{{ asset('images/talentum_voice.png') }}" alt="{{ config('app.name') }}" class="mx-auto mb-8 block h-8">
+
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="h-2 bg-indigo-600"></div>
             <div class="p-8 sm:p-10">
