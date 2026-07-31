@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\NpsSurveys;
 
-use App\Enums\NpsSurveyStatus;
 use App\Filament\Admin\Resources\NpsSurveys\Pages\CreateNpsSurvey;
 use App\Filament\Admin\Resources\NpsSurveys\Pages\EditNpsSurvey;
 use App\Filament\Admin\Resources\NpsSurveys\Pages\ListNpsSurveys;
@@ -59,7 +58,7 @@ class NpsSurveyResource extends Resource
                 ])
                 ->columns(2)
                 ->addActionLabel('Agregar destinatario')
-                ->disabled(fn (?NpsSurvey $record) => $record?->status === NpsSurveyStatus::Sent),
+                ->helperText('Podés seguir agregando destinatarios después de enviar la campaña; el botón "Enviar" solo les manda el email a los nuevos.'),
         ]);
     }
 

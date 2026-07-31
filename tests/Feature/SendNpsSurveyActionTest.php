@@ -19,15 +19,15 @@ class SendNpsSurveyActionTest extends TestCase
     {
         $survey = NpsSurvey::create(['title' => 'NPS', 'question' => '¿Nos recomendarías?']);
 
-        $this->expectExceptionMessage('Agregá al menos un destinatario antes de enviar.');
+        $this->expectExceptionMessage('No hay destinatarios nuevos para enviar.');
 
         app(SendNpsSurveyAction::class)->execute($survey);
     }
 
-    public function test_it_rejects_survey_that_is_not_draft(): void
+    public function test_it_rejects_when_everyone_was_already_invited(): void
     {
         $survey = NpsSurvey::create(['title' => 'NPS', 'question' => '¿Nos recomendarías?', 'status' => NpsSurveyStatus::Sent]);
-        $survey->responses()->create(['name' => 'Juan', 'email' => 'juan@test.com']);
+        $survey->responses()->create(['name' => 'Juan', 'email' => 'juan@test.com', 'invited_at' => now()]);
 
         $this->expectException(NpsSurveyCannotBeSentException::class);
 
@@ -51,5 +51,21 @@ class SendNpsSurveyActionTest extends TestCase
         Mail::assertQueuedCount(2);
         Mail::assertQueued(NpsInvitationMail::class, fn (NpsInvitationMail $mail) => $mail->hasTo('juan@test.com'));
         Mail::assertQueued(NpsInvitationMail::class, fn (NpsInvitationMail $mail) => $mail->hasTo('ana@test.com'));
+
+        $this->assertNotNull($survey->responses()->where('email', 'juan@test.com')->first()->invited_at);
+    }
+
+    public function test_it_only_sends_to_newly_added_recipients_on_an_already_sent_survey(): void
+    {
+        Mail::fake();
+
+        $survey = NpsSurvey::create(['title' => 'NPS', 'question' => '¿Nos recomendarías?', 'status' => NpsSurveyStatus::Sent]);
+        $survey->responses()->create(['name' => 'Juan', 'email' => 'juan@test.com', 'invited_at' => now()]);
+        $survey->responses()->create(['name' => 'Nuevo', 'email' => 'nuevo@test.com']);
+
+        app(SendNpsSurveyAction::class)->execute($survey);
+
+        Mail::assertQueuedCount(1);
+        Mail::assertQueued(NpsInvitationMail::class, fn (NpsInvitationMail $mail) => $mail->hasTo('nuevo@test.com'));
     }
 }

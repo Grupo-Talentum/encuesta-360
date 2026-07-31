@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\NpsSurveys\Pages;
 
+use App\Actions\Nps\ResendNpsSurveyAction;
 use App\Actions\Nps\SendNpsSurveyAction;
 use App\Enums\NpsSurveyStatus;
 use App\Exceptions\NpsSurveyCannotBeSentException;
@@ -49,9 +50,8 @@ class EditNpsSurvey extends EditRecord
                 ->label('Enviar')
                 ->icon(Heroicon::OutlinedPaperAirplane)
                 ->color('success')
-                ->visible(fn (NpsSurvey $record) => $record->status === NpsSurveyStatus::Draft)
                 ->requiresConfirmation()
-                ->modalDescription('Se enviará el email a todos los destinatarios cargados. Esta acción no se puede deshacer.')
+                ->modalDescription('Se enviará el email a los destinatarios que todavía no lo recibieron.')
                 ->action(function (NpsSurvey $record) {
                     try {
                         app(SendNpsSurveyAction::class)->execute($record);
@@ -63,6 +63,29 @@ class EditNpsSurvey extends EditRecord
                     } catch (NpsSurveyCannotBeSentException $exception) {
                         Notification::make()
                             ->title('No se pudo enviar')
+                            ->body($exception->getMessage())
+                            ->danger()
+                            ->send();
+                    }
+                }),
+            Action::make('resend')
+                ->label('Reenviar a todos')
+                ->icon(Heroicon::OutlinedArrowPath)
+                ->color('warning')
+                ->visible(fn (NpsSurvey $record) => $record->status === NpsSurveyStatus::Sent)
+                ->requiresConfirmation()
+                ->modalDescription('Se reenviará el email a TODOS los destinatarios, incluso a quienes ya respondieron.')
+                ->action(function (NpsSurvey $record) {
+                    try {
+                        app(ResendNpsSurveyAction::class)->execute($record);
+
+                        Notification::make()
+                            ->title('Encuesta reenviada')
+                            ->success()
+                            ->send();
+                    } catch (NpsSurveyCannotBeSentException $exception) {
+                        Notification::make()
+                            ->title('No se pudo reenviar')
                             ->body($exception->getMessage())
                             ->danger()
                             ->send();

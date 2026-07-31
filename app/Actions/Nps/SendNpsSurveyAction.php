@@ -13,20 +13,21 @@ class SendNpsSurveyAction
 {
     public function execute(NpsSurvey $survey): void
     {
-        if ($survey->status !== NpsSurveyStatus::Draft) {
-            throw new NpsSurveyCannotBeSentException('Solo se pueden enviar campañas en borrador.');
+        $pending = $survey->responses()->whereNull('invited_at')->get();
+
+        if ($pending->isEmpty()) {
+            throw new NpsSurveyCannotBeSentException('No hay destinatarios nuevos para enviar.');
         }
 
-        if ($survey->responses()->count() === 0) {
-            throw new NpsSurveyCannotBeSentException('Agregá al menos un destinatario antes de enviar.');
-        }
+        DB::transaction(function () use ($survey, $pending) {
+            $pending->each(function ($response) {
+                Mail::to($response->email, $response->name)->queue(new NpsInvitationMail($response));
+                $response->update(['invited_at' => now()]);
+            });
 
-        DB::transaction(function () use ($survey) {
-            $survey->responses->each(
-                fn ($response) => Mail::to($response->email, $response->name)->queue(new NpsInvitationMail($response))
-            );
-
-            $survey->update(['status' => NpsSurveyStatus::Sent, 'sent_at' => now()]);
+            if ($survey->status === NpsSurveyStatus::Draft) {
+                $survey->update(['status' => NpsSurveyStatus::Sent, 'sent_at' => now()]);
+            }
         });
     }
 }

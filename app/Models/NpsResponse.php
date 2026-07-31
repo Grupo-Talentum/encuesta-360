@@ -8,11 +8,12 @@ use Illuminate\Support\Str;
 
 class NpsResponse extends Model
 {
-    protected $fillable = ['nps_survey_id', 'name', 'email', 'token', 'score', 'comment', 'answered_at'];
+    protected $fillable = ['nps_survey_id', 'name', 'email', 'token', 'invited_at', 'score', 'comment', 'answered_at'];
 
     protected function casts(): array
     {
         return [
+            'invited_at' => 'datetime',
             'answered_at' => 'datetime',
         ];
     }
