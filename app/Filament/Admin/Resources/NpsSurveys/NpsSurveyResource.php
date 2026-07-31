@@ -58,7 +58,7 @@ class NpsSurveyResource extends Resource
                 ])
                 ->columns(2)
                 ->addActionLabel('Agregar destinatario')
-                ->helperText('Podés seguir agregando destinatarios después de enviar la campaña; el botón "Enviar" solo les manda el email a los nuevos.'),
+                ->helperText('Puedes seguir agregando destinatarios después de enviar la campaña; el botón "Enviar" solo les manda el email a los nuevos.'),
         ]);
     }
 

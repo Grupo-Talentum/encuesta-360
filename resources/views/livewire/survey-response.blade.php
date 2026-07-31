@@ -79,6 +79,8 @@
                 </button>
             </div>
         </div>
+
+        <x-survey.scale-legend-popup :legend="$this->scaleLegend" />
     @elseif ($step === 'form')
         <x-survey.step-indicator :step="$step" />
 
@@ -108,7 +110,7 @@
                     <div x-show="confirmSkip" x-transition class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
                         <h2 class="text-lg font-bold text-slate-900">¿Omitir?</h2>
                         <p class="mt-2 text-sm text-slate-500">
-                            Confirmás que no tenés suficiente experiencia de colaboración con <span class="font-medium text-slate-700">{{ $this->currentEvaluation->evaluatee->name }}</span>.
+                            Confirmas que no tienes suficiente experiencia de colaboración con <span class="font-medium text-slate-700">{{ $this->currentEvaluation->evaluatee->name }}</span>.
                         </p>
                         <div class="mt-6 flex justify-end gap-3">
                             <button type="button" x-on:click="confirmSkip = false" class="text-sm font-medium text-slate-500 hover:text-slate-600">
@@ -156,35 +158,7 @@
             </button>
         </form>
 
-        @if (count($this->scaleLegend))
-            <div x-data="{ open: true }" class="fixed bottom-6 right-6 z-40">
-                <div
-                    x-show="open"
-                    x-cloak
-                    x-on:click.outside="open = false"
-                    x-transition
-                    class="absolute bottom-16 right-0 w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl"
-                >
-                    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">Escala de valoración</p>
-                    <div class="space-y-1.5">
-                        @foreach ($this->scaleLegend as $item)
-                            <p class="text-sm font-bold {{ $item['color'] }}">{{ $item['text'] }}</p>
-                        @endforeach
-                    </div>
-                </div>
-
-                <button
-                    type="button"
-                    x-on:click="open = !open"
-                    class="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-300 transition hover:bg-indigo-700"
-                    aria-label="Recordar escala de valoración"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                    </svg>
-                </button>
-            </div>
-        @endif
+        <x-survey.scale-legend-popup :legend="$this->scaleLegend" />
     @elseif ($step === 'done')
         <x-survey.step-indicator :step="$step" />
 
