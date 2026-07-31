@@ -6,6 +6,10 @@ use App\Actions\Surveys\PublishSurveyAction;
 use App\Enums\SurveyStatus;
 use App\Exceptions\SurveyCannotBePublishedException;
 use App\Filament\Admin\Resources\Surveys\SurveyResource;
+use App\Mail\EvaluationInvitationMail;
+use App\Models\Employee;
+use App\Models\Evaluation;
+use App\Models\EvaluationSession;
 use App\Models\Survey;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -25,6 +29,26 @@ class EditSurvey extends EditRecord
                 ->icon(Heroicon::OutlinedChartBar)
                 ->color('gray')
                 ->url(fn (Survey $record) => SurveyResource::getUrl('results', ['record' => $record])),
+            Action::make('preview')
+                ->label('Previsualizar email')
+                ->icon(Heroicon::OutlinedEye)
+                ->color('gray')
+                ->modalHeading('Previsualización del email')
+                ->modalSubmitAction(false)
+                ->modalCancelActionLabel('Cerrar')
+                ->modalContent(function (Survey $record) {
+                    $evaluator = Employee::first() ?? new Employee(['name' => 'Evaluador de ejemplo']);
+                    $sampleEvaluatee = new Employee(['name' => 'Persona de ejemplo']);
+                    $sampleEvaluation = (new Evaluation())->setRelation('evaluatee', $sampleEvaluatee);
+
+                    $session = (new EvaluationSession(['uuid' => 'preview']))
+                        ->setRelation('survey', $record)
+                        ->setRelation('evaluations', collect([$sampleEvaluation]));
+
+                    $html = (new EvaluationInvitationMail($session, $evaluator))->render();
+
+                    return view('filament.admin.email-preview', ['html' => $html]);
+                }),
             Action::make('publish')
                 ->label('Publicar')
                 ->icon(Heroicon::OutlinedPaperAirplane)

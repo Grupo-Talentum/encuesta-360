@@ -43,7 +43,7 @@ class EditNpsSurvey extends EditRecord
 
                     $html = (new NpsInvitationMail($sample))->render();
 
-                    return view('filament.admin.resources.nps-surveys.preview', ['html' => $html]);
+                    return view('filament.admin.email-preview', ['html' => $html]);
                 }),
             Action::make('send')
                 ->label('Enviar')
