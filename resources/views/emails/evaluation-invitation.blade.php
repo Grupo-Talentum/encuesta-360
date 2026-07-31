@@ -12,7 +12,7 @@
                 <table role="presentation" width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
                     <tr>
                         <td align="center" style="padding-bottom:24px;">
-                            <img src="{{ asset('images/talentum_voice.png') }}" alt="{{ config('app.name') }}" height="80" style="height:80px; display:block;">
+                            <img src="{{ asset('images/talentum_voice.png') }}" alt="{{ config('app.name') }}" height="48" style="height:48px; display:block;">
                         </td>
                     </tr>
                     <tr>

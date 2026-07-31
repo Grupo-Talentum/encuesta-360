@@ -12,12 +12,12 @@
 
 /* Brand logo: small by default (sidebar/topbar), scaled up for the login screen. */
 .talentum-voice-logo {
-    height: 4.5rem;
+    height: 2rem;
     width: auto;
 }
 
 .fi-simple-layout .talentum-voice-logo {
-    height: 9rem;
+    height: 4rem;
 }
 
 /* Login / password reset / register screens */
@@ -91,7 +91,7 @@
 
 .fi-topbar nav,
 .fi-sidebar-header {
-    min-height: 6rem;
+    min-height: 4rem;
 }
 
 .dark .fi-topbar {
