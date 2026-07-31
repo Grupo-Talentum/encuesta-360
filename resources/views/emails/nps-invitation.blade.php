@@ -40,8 +40,8 @@
                                         <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
                                             <tr>
                                                 @foreach ($scoreLinks as $score => $url)
-                                                    <td style="padding:2px;">
-                                                        <a href="{{ $url }}" style="display:block; width:28px; height:28px; line-height:28px; text-align:center; border-radius:6px; background-color:{{ $score <= 6 ? '#fee2e2' : ($score <= 8 ? '#fef3c7' : '#d1fae5') }}; color:{{ $score <= 6 ? '#b91c1c' : ($score <= 8 ? '#92400e' : '#065f46') }}; font-size:13px; font-weight:600; text-decoration:none;">
+                                                    <td width="28" height="28" align="center" valign="middle" style="padding:2px 1px; width:28px; height:28px; border-radius:6px; background-color:{{ $score <= 6 ? '#fee2e2' : ($score <= 8 ? '#fef3c7' : '#d1fae5') }}; mso-padding-alt:0;">
+                                                        <a href="{{ $url }}" style="display:block; width:28px; height:28px; line-height:28px; text-align:center; color:{{ $score <= 6 ? '#b91c1c' : ($score <= 8 ? '#92400e' : '#065f46') }}; font-size:13px; font-weight:600; text-decoration:none;">
                                                             {{ $score }}
                                                         </a>
                                                     </td>
@@ -65,7 +65,7 @@
                                             Listening. Learning. Improving.
                                         </p>
                                         <p style="margin:0; font-size:13px; line-height:1.5; color:#a1a1aa;">
-                                            ¿No puedes utilizar los botones? Puedes compartir tu experiencia desde este enlace: <a href="{{ $scoreLinks[10] }}" style="color:#159895;">Visualizar en el navegador</a>.
+                                            ¿No puedes utilizar los botones? Puedes compartir tu experiencia desde este enlace: <a href="{{ $showUrl }}" style="color:#159895;">Visualizar en el navegador</a>.
                                         </p>
                                     </td>
                                 </tr>

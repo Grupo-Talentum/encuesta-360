@@ -10,5 +10,6 @@ Route::get('/', function () {
 
 Route::get('/survey/{uuid}', SurveyResponse::class)->name('survey.show');
 
+Route::get('/nps/{token}', [NpsResponseController::class, 'show'])->name('nps.show');
 Route::get('/nps/{token}/responder', [NpsResponseController::class, 'score'])->name('nps.respond');
 Route::post('/nps/{token}/comentario', [NpsResponseController::class, 'storeComment'])->name('nps.comment');

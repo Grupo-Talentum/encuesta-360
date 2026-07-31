@@ -35,6 +35,7 @@ class NpsInvitationMail extends Mailable implements ShouldQueue
                 'name' => $this->response->name,
                 'question' => $this->response->npsSurvey->question,
                 'scoreLinks' => $scoreLinks,
+                'showUrl' => route('nps.show', $this->response->token),
             ],
         );
     }

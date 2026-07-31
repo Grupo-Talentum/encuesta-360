@@ -8,6 +8,17 @@ use Illuminate\View\View;
 
 class NpsResponseController extends Controller
 {
+    public function show(string $token): View
+    {
+        $response = NpsResponse::where('token', $token)->firstOrFail();
+
+        if ($response->answered_at) {
+            return view('nps.thanks', ['response' => $response]);
+        }
+
+        return view('nps.choose', ['response' => $response]);
+    }
+
     public function score(Request $request, string $token): View
     {
         $response = NpsResponse::where('token', $token)->firstOrFail();

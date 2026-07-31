@@ -67,4 +67,26 @@ class NpsResponseControllerTest extends TestCase
     {
         $this->get('/nps/token-invalido/responder?score=9')->assertNotFound();
     }
+
+    public function test_show_lets_you_choose_a_score_without_preselecting_one(): void
+    {
+        $response = $this->response();
+
+        $this->get("/nps/{$response->token}")
+            ->assertOk()
+            ->assertSee($response->npsSurvey->question)
+            ->assertDontSee('Gracias por compartir');
+
+        $this->assertNull($response->refresh()->score);
+    }
+
+    public function test_show_redirects_to_thanks_if_already_answered(): void
+    {
+        $response = $this->response();
+        $this->get("/nps/{$response->token}/responder?score=7");
+
+        $this->get("/nps/{$response->token}")
+            ->assertOk()
+            ->assertSee('Gracias por compartir');
+    }
 }
