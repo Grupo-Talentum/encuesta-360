@@ -3,6 +3,7 @@
     x-data
     x-on:survey-scroll-top.window="window.scrollTo({ top: 0, behavior: 'smooth' })"
 >
+    <img src="{{ asset('images/talentum_voice.png') }}" alt="{{ config('app.name') }}" class="mx-auto mb-8 block h-8">
 
     @if ($step === 'invalid')
         <div class="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">

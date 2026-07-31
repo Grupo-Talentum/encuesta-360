@@ -19,7 +19,7 @@ class NpsInvitationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Talentum Voice | Escuchamos para mejorar ⭐',
+            subject: $this->response->npsSurvey->title,
         );
     }
 

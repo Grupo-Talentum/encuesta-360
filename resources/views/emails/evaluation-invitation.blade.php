@@ -54,8 +54,7 @@
                                             Listening. Learning. Improving.
                                         </p>
                                         <p style="margin:0; font-size:13px; line-height:1.5; color:#a1a1aa;">
-                                            Si el botón no funciona, copiá y pegá este enlace en tu navegador:<br>
-                                            <a href="{{ $url }}" style="color:#159895; word-break:break-all;">{{ $url }}</a>
+                                            ¿No puedes utilizar los botones? Puedes compartir tu experiencia desde este enlace: <a href="{{ $url }}" style="color:#159895;">Visualizar en el navegador</a>.
                                         </p>
                                     </td>
                                 </tr>

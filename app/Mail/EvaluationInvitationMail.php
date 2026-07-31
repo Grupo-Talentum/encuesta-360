@@ -23,7 +23,7 @@ class EvaluationInvitationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Nueva evaluación disponible: {$this->session->survey->title}",
+            subject: $this->session->survey->title,
         );
     }
 

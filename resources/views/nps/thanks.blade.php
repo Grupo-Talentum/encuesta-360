@@ -18,12 +18,13 @@
                 </div>
 
                 @if ($response->comment === null)
-                    <h1 class="mt-5 text-xl font-semibold text-slate-900">¡Gracias por tu respuesta!</h1>
-                    <p class="mt-2 text-slate-500">Registramos tu puntaje: <span class="font-semibold text-slate-700">{{ $response->score }}</span>.</p>
+                    <h1 class="mt-5 text-xl font-semibold text-slate-900">¡Gracias por compartir tu experiencia!</h1>
+                    <p class="mt-2 text-slate-500">Hemos registrado tu puntuación: <span class="font-semibold text-slate-700">{{ $response->score }}</span>.</p>
+                    <p class="mt-2 text-slate-500">Cada opinión nos ayuda a seguir aprendiendo y mejorando. Si lo deseas, puedes añadir un comentario.</p>
 
                     <form method="POST" action="{{ route('nps.comment', $response->token) }}" class="mt-6 text-left">
                         @csrf
-                        <label class="block text-sm font-medium text-slate-700">¿Querés contarnos algo más? (opcional)</label>
+                        <label class="block text-sm font-medium text-slate-700">Comentario (opcional)</label>
                         <textarea name="comment" rows="4" class="mt-2 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"></textarea>
                         <div class="mt-4 flex justify-end">
                             <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Enviar</button>
