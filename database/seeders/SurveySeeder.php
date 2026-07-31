@@ -51,9 +51,9 @@ class SurveySeeder extends Seeder
             'title' => 'Encuesta 360 de Colaboración',
             'type' => SurveyType::TeamsToTeam,
             'team_id' => $equipoEvaluado->id,
-            'description' => 'Evaluación de colaboración entre áreas para identificar fortalezas y oportunidades de mejora.',
-            'instructions' => "Objetivo: evaluar la colaboración de la persona indicada con tu área durante el último periodo.\n\nEscala: cada pregunta se responde del 1 (mínimo) al 10 (máximo).\n\n1-3 indica un desempeño muy por debajo de lo esperado.\n4-6 indica un desempeño aceptable con margen de mejora.\n7-8 indica buen desempeño.\n9-10 indica un desempeño excelente.\n\nRecomendaciones: respondé con la mayor sinceridad posible, pensando en hechos concretos de los últimos meses.\n\nNota: usá toda la escala disponible, evitá concentrar todas las respuestas en los mismos valores.\n\n¡Gracias por tu tiempo y tu honestidad!",
-            'start_message' => 'A continuación vas a evaluar a la persona indicada. La encuesta toma unos 5 minutos.',
+            'description' => "En esta ocasión queremos conocer tu experiencia de colaboración con la persona indicada.\n\nTu opinión nos ayudará a comprender mejor cómo colaboramos, identificar fortalezas y descubrir oportunidades para seguir evolucionando juntos.",
+            'instructions' => "¿Cómo responder?\nValora cada aspecto utilizando una escala del 1 (mínimo) al 10 (máximo).\n\n1-3: Muy por debajo de lo esperado.\n4-6: Adecuado, con oportunidades de mejora.\n7-8: Buen desempeño.\n9-10: Desempeño excelente.\n\nAlgunas recomendaciones:\nResponde con la mayor sinceridad posible.\nBasa tus respuestas en experiencias y situaciones concretas vividas durante los últimos meses.\nUtiliza toda la escala cuando sea necesario; no todas las valoraciones tienen por qué ser iguales.\n\nTu feedback es confidencial y contribuirá a seguir fortaleciendo la colaboración, impulsar el aprendizaje y convertir cada experiencia en una oportunidad de mejora.",
+            'start_message' => 'Gracias por dedicar unos minutos a compartir tu experiencia.',
             'end_message' => 'Gracias por completar la evaluación. Tu respuesta fue registrada correctamente.',
         ]);
 

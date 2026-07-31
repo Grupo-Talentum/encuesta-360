@@ -23,13 +23,17 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:32px;">
-                                        <p style="margin:0 0 4px; font-size:12px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#159895;">
-                                            Encuesta NPS
-                                        </p>
                                         <h1 style="margin:0 0 16px; font-size:20px; color:#18181b;">
-                                            Hola {{ $name }}.
+                                            Hola {{ $name }},
                                         </h1>
+                                        <p style="margin:0 0 16px; font-size:15px; line-height:1.6; color:#3f3f46;">
+                                            En Talentum creemos que la mejor forma de seguir evolucionando es escuchar a quienes confían en nosotros.
+                                        </p>
                                         <p style="margin:0 0 24px; font-size:15px; line-height:1.6; color:#3f3f46;">
+                                            A través de Talentum Voice, nos gustaría conocer tu opinión respondiendo a una única pregunta.<br>
+                                            Te llevará menos de un minuto.
+                                        </p>
+                                        <p style="margin:0 0 24px; font-size:15px; font-weight:600; line-height:1.6; color:#18181b;">
                                             {{ $question }}
                                         </p>
 
@@ -51,7 +55,16 @@
                                             </tr>
                                         </table>
 
-                                        <p style="margin:24px 0 0; font-size:13px; line-height:1.5; color:#a1a1aa;">
+                                        <p style="margin:24px 0 24px; font-size:15px; line-height:1.6; color:#3f3f46;">
+                                            Gracias por dedicar unos segundos a compartir tu experiencia.
+                                        </p>
+                                        <p style="margin:0 0 4px; font-size:14px; font-weight:600; color:#159895;">
+                                            Talentum Voice
+                                        </p>
+                                        <p style="margin:0 0 24px; font-size:12px; font-style:italic; color:#a1a1aa;">
+                                            Listening. Learning. Improving.
+                                        </p>
+                                        <p style="margin:0; font-size:13px; line-height:1.5; color:#a1a1aa;">
                                             Si los botones no funcionan, respondé desde este enlace: <a href="{{ $scoreLinks[10] }}" style="color:#159895;">calificar con 10</a> (o reemplazá el número al final del enlace por tu puntaje).
                                         </p>
                                     </td>

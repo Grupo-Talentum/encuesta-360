@@ -126,11 +126,13 @@ class SurveyResponse extends Component
         $legend = [];
 
         foreach (explode("\n", $instructions) as $line) {
+            $lowerLine = mb_strtolower($line);
+
             $color = match (true) {
-                str_contains($line, 'muy por debajo') => 'text-red-600',
-                str_contains($line, 'aceptable') => 'text-amber-600',
-                str_contains($line, 'buen desempeño') => 'text-indigo-600',
-                str_contains($line, 'excelente') => 'text-emerald-600',
+                str_contains($lowerLine, 'muy por debajo') => 'text-red-600',
+                str_contains($lowerLine, 'oportunidades de mejora') => 'text-amber-600',
+                str_contains($lowerLine, 'buen desempeño') => 'text-indigo-600',
+                str_contains($lowerLine, 'excelente') => 'text-emerald-600',
                 default => null,
             };
 

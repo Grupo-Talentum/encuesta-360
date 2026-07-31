@@ -21,14 +21,13 @@
             <div class="h-2 bg-gradient-to-r from-indigo-500 to-violet-500"></div>
 
             <div class="p-8 sm:p-10">
-                <span class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600">
-                    Evaluación 360 · {{ $this->totalCount }} {{ $this->totalCount === 1 ? 'evaluación' : 'evaluaciones' }}
-                </span>
-
-                <h1 class="mt-4 text-2xl font-bold text-slate-900 sm:text-3xl">{{ $session->survey->title }}</h1>
+                <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">
+                    Talentum Voice
+                </p>
+                <p class="mt-1 text-sm text-slate-500">Escuchamos para mejorar.</p>
 
                 @if ($session->survey->description)
-                    <p class="mt-3 text-slate-600">{{ $session->survey->description }}</p>
+                    <p class="mt-4 leading-relaxed whitespace-pre-line text-slate-600">{{ $session->survey->description }}</p>
                 @endif
 
                 @if ($session->survey->instructions)
@@ -36,15 +35,22 @@
                         @foreach (explode("\n", $session->survey->instructions) as $line)
                             @continue(trim($line) === '')
                             @php
+                                $trimmed = trim($line);
+                                $lowerLine = mb_strtolower($trimmed);
                                 $scaleColor = match (true) {
-                                    str_contains($line, 'muy por debajo') => 'text-red-600',
-                                    str_contains($line, 'aceptable') => 'text-amber-600',
-                                    str_contains($line, 'buen desempeño') => 'text-indigo-600',
-                                    str_contains($line, 'excelente') => 'text-emerald-600',
+                                    str_contains($lowerLine, 'muy por debajo') => 'text-red-600',
+                                    str_contains($lowerLine, 'oportunidades de mejora') => 'text-amber-600',
+                                    str_contains($lowerLine, 'buen desempeño') => 'text-indigo-600',
+                                    str_contains($lowerLine, 'excelente') => 'text-emerald-600',
                                     default => null,
                                 };
+                                $isHeading = ! $scaleColor && (str_ends_with($trimmed, ':') || str_ends_with($trimmed, '?'));
                             @endphp
-                            <p @class(['font-bold' => $scaleColor, $scaleColor])>{{ trim($line) }}</p>
+                            <p @class([
+                                'font-bold' => $scaleColor,
+                                $scaleColor,
+                                'mt-4 font-semibold text-slate-900' => $isHeading,
+                            ])>{{ $trimmed }}</p>
                         @endforeach
                     </div>
                 @endif
@@ -53,8 +59,10 @@
                     <p class="mt-4 text-sm text-slate-500">{{ $session->survey->start_message }}</p>
                 @endif
 
+                <hr class="mt-6 border-t border-slate-100">
+
                 <p class="mt-4 text-sm text-slate-500">
-                    Vas a evaluar a:
+                    Hoy vas a compartir tu experiencia de colaboración con:
                     <span class="font-medium text-slate-700">{{ $session->evaluations->pluck('evaluatee.name')->implode(', ') }}</span>
                 </p>
 
@@ -74,22 +82,44 @@
         <x-survey.step-indicator :step="$step" />
 
         <form wire:submit="submit">
-            <div class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7">
+            <div class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-7" x-data="{ confirmSkip: false }">
                 <div class="flex items-center justify-between">
-                    <h1 class="text-lg font-bold text-slate-900">{{ $session->survey->title }}</h1>
+                    <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Talentum Voice</p>
                     <span class="text-xs font-medium text-slate-400">{{ $this->resolvedCount + 1 }} de {{ $this->totalCount }}</span>
                 </div>
-                <p class="mt-1 text-sm text-slate-500">
-                    Evaluando a <span class="font-medium text-slate-700">{{ $this->currentEvaluation->evaluatee->name }}</span>
+                <p class="text-sm text-slate-500">Escuchamos para mejorar.</p>
+
+                <p class="mt-4 text-sm text-slate-500">
+                    Queremos conocer tu experiencia de colaboración con:
+                    <span class="block font-medium text-slate-900">{{ $this->currentEvaluation->evaluatee->name }}</span>
                 </p>
-                <button
-                    type="button"
-                    wire:click="skip"
-                    onclick="return confirm('¿Confirmás que no trabajaste con {{ $this->currentEvaluation->evaluatee->name }} y querés omitir esta evaluación?')"
-                    class="mt-1 text-xs text-slate-400 hover:text-slate-600"
-                >
-                    No he trabajado con esta persona — omitir
+
+                <button type="button" x-on:click="confirmSkip = true" class="mt-3 flex items-center gap-2">
+                    <span class="flex h-4 w-4 items-center justify-center rounded border border-slate-300"></span>
+                    <span class="text-xs text-slate-500">No dispongo de suficiente experiencia de colaboración para responder.</span>
                 </button>
+
+                <div
+                    x-show="confirmSkip"
+                    x-cloak
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
+                >
+                    <div x-show="confirmSkip" x-transition class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
+                        <h2 class="text-lg font-bold text-slate-900">¿Omitir esta evaluación?</h2>
+                        <p class="mt-2 text-sm text-slate-500">
+                            Confirmás que no tenés suficiente experiencia de colaboración con <span class="font-medium text-slate-700">{{ $this->currentEvaluation->evaluatee->name }}</span> y querés omitir esta evaluación.
+                        </p>
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button type="button" x-on:click="confirmSkip = false" class="text-sm font-medium text-slate-500 hover:text-slate-600">
+                                Cancelar
+                            </button>
+                            <button type="button" wire:click="skip" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+                                Sí, omitir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
                     <div class="h-full rounded-full bg-indigo-600 transition-all" style="width: {{ $this->totalCount > 0 ? ($this->resolvedCount / $this->totalCount * 100) : 0 }}%"></div>
                 </div>

@@ -32,7 +32,6 @@ class EvaluationInvitationMail extends Mailable
         return new Content(
             view: 'emails.evaluation-invitation',
             with: [
-                'survey' => $this->session->survey,
                 'evaluator' => $this->evaluator,
                 'evaluatees' => $this->session->evaluations->pluck('evaluatee.name'),
                 'url' => route('survey.show', $this->session->uuid),

@@ -23,31 +23,37 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:32px;">
-                                        <p style="margin:0 0 4px; font-size:12px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#159895;">
-                                            Evaluación 360
-                                        </p>
                                         <h1 style="margin:0 0 16px; font-size:20px; color:#18181b;">
-                                            Hola {{ $evaluator->name }}.
+                                            Hola {{ $evaluator->name }},
                                         </h1>
                                         <p style="margin:0 0 16px; font-size:15px; line-height:1.6; color:#3f3f46;">
-                                            Tenés una nueva evaluación disponible en <strong>{{ $survey->title }}</strong>.
+                                            Hay una nueva oportunidad para compartir tu experiencia a través de Talentum Voice.
                                         </p>
-                                        <p style="margin:0 0 8px; font-size:15px; line-height:1.6; color:#3f3f46;">
-                                            Vas a evaluar a:
-                                        </p>
-                                        <p style="margin:0 0 24px; font-size:15px; font-weight:600; color:#18181b;">
-                                            {{ $evaluatees->implode(', ') }}
+                                        <p style="margin:0 0 24px; font-size:15px; line-height:1.6; color:#3f3f46;">
+                                            En esta ocasión, nos gustaría conocer tu experiencia de colaboración con <strong>{{ $evaluatees->implode(', ') }}</strong>.
                                         </p>
                                         <table role="presentation" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td style="border-radius:8px; background-color:#159895;">
                                                     <a href="{{ $url }}" style="display:inline-block; padding:12px 28px; font-size:15px; font-weight:600; color:#ffffff; text-decoration:none;">
-                                                        Responder encuesta
+                                                        Compartir mi experiencia
                                                     </a>
                                                 </td>
                                             </tr>
                                         </table>
-                                        <p style="margin:24px 0 0; font-size:13px; line-height:1.5; color:#a1a1aa;">
+                                        <p style="margin:24px 0 16px; font-size:15px; line-height:1.6; color:#3f3f46;">
+                                            Tu punto de vista nos ayuda a reconocer fortalezas, identificar oportunidades y seguir construyendo una mejor experiencia para todos.
+                                        </p>
+                                        <p style="margin:0 0 24px; font-size:15px; line-height:1.6; color:#3f3f46;">
+                                            Gracias por formar parte de esta cultura de escucha y mejora continua.
+                                        </p>
+                                        <p style="margin:0 0 4px; font-size:14px; font-weight:600; color:#159895;">
+                                            Talentum Voice
+                                        </p>
+                                        <p style="margin:0 0 24px; font-size:12px; font-style:italic; color:#a1a1aa;">
+                                            Listening. Learning. Improving.
+                                        </p>
+                                        <p style="margin:0; font-size:13px; line-height:1.5; color:#a1a1aa;">
                                             Si el botón no funciona, copiá y pegá este enlace en tu navegador:<br>
                                             <a href="{{ $url }}" style="color:#159895; word-break:break-all;">{{ $url }}</a>
                                         </p>

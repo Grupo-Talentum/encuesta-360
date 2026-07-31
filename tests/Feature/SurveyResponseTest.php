@@ -157,7 +157,7 @@ class SurveyResponseTest extends TestCase
     {
         $survey = $this->publishedSurveyWithQuestions();
         $survey->update([
-            'instructions' => "Escala del 1 al 10.\n\n1-3 indica un desempeño muy por debajo de lo esperado.\n4-6 indica un desempeño aceptable con margen de mejora.\n7-8 indica buen desempeño.\n9-10 indica un desempeño excelente.",
+            'instructions' => "Escala del 1 al 10.\n\n1-3: Muy por debajo de lo esperado.\n4-6: Adecuado, con oportunidades de mejora.\n7-8: Buen desempeño.\n9-10: Desempeño excelente.",
         ]);
         $session = $this->sessionFor($survey, 'Juan', ['Carlos']);
 
@@ -173,7 +173,7 @@ class SurveyResponseTest extends TestCase
         $this->assertSame('text-emerald-600', $legend[3]['color']);
 
         $component->assertSee('Escala de valoración');
-        $component->assertSee('9-10 indica un desempeño excelente.');
+        $component->assertSee('9-10: Desempeño excelente.');
     }
 
     public function test_skip_marks_evaluation_as_skipped_and_advances_without_answers(): void
