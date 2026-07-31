@@ -9,11 +9,14 @@ use App\Filament\Admin\Resources\Employees\RelationManagers\RelationsRelationMan
 use App\Models\Employee;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
 class EmployeeResource extends Resource
@@ -65,6 +68,10 @@ class EmployeeResource extends Resource
                 ->searchable()
                 ->preload()
                 ->helperText('Solo se muestran participantes del mismo equipo. Dejar vacío si esta persona no reporta a nadie (tope de la jerarquía). Los compañeros que reportan al mismo superior se relacionan automáticamente entre sí.'),
+            Toggle::make('is_active')
+                ->label('Participa en evaluaciones')
+                ->default(true)
+                ->helperText('Si se desactiva, esta persona no se incluye como evaluador ni evaluado al publicar encuestas.'),
         ]);
     }
 
@@ -78,6 +85,10 @@ class EmployeeResource extends Resource
                 TextColumn::make('company')->label('Empresa')->searchable()->placeholder('—'),
                 TextColumn::make('team.name')->label('Equipo')->sortable(),
                 TextColumn::make('reportsTo.name')->label('Reporta a')->placeholder('—'),
+                IconColumn::make('is_active')->label('Participa')->boolean(),
+            ])
+            ->filters([
+                TernaryFilter::make('is_active')->label('Participa en evaluaciones'),
             ])
             ->defaultSort('name');
     }

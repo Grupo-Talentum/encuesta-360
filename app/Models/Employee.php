@@ -14,7 +14,18 @@ class Employee extends Model
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'position', 'company', 'email', 'team_id', 'superior_id'];
+    protected $attributes = [
+        'is_active' => true,
+    ];
+
+    protected $fillable = ['name', 'position', 'company', 'email', 'team_id', 'superior_id', 'is_active'];
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
 
     private ?int $previousSuperiorId = null;
 

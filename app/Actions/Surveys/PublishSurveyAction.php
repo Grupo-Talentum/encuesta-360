@@ -61,10 +61,11 @@ class PublishSurveyAction
         return match ($survey->type) {
             SurveyType::TeamsToTeam => $this->teamsToTeamRelationsFor($survey),
             default => EmployeeRelation::query()
-                ->when(
+                ->whereHas('employee', fn ($q) => $q->where('is_active', true)->when(
                     $survey->team_id,
-                    fn ($query) => $query->whereHas('employee', fn ($q) => $q->where('team_id', $survey->team_id))
-                )
+                    fn ($q) => $q->where('team_id', $survey->team_id)
+                ))
+                ->whereHas('relatedEmployee', fn ($q) => $q->where('is_active', true))
                 ->get(),
         };
     }
@@ -72,15 +73,16 @@ class PublishSurveyAction
     private function teamsToTeamRelationsFor(Survey $survey): Collection
     {
         $internal = EmployeeRelation::query()
-            ->whereHas('employee', fn ($q) => $q->where('team_id', $survey->team_id))
+            ->whereHas('employee', fn ($q) => $q->where('is_active', true)->where('team_id', $survey->team_id))
+            ->whereHas('relatedEmployee', fn ($q) => $q->where('is_active', true))
             ->get();
 
         $evaluatorTeamIds = $survey->evaluatorTeams()->pluck('teams.id');
 
         $crossTeam = EmployeeRelation::query()
             ->where('type', RelationType::TeamsToTeam)
-            ->whereHas('employee', fn ($q) => $q->whereIn('team_id', $evaluatorTeamIds))
-            ->whereHas('relatedEmployee', fn ($q) => $q->where('team_id', $survey->team_id))
+            ->whereHas('employee', fn ($q) => $q->where('is_active', true)->whereIn('team_id', $evaluatorTeamIds))
+            ->whereHas('relatedEmployee', fn ($q) => $q->where('is_active', true)->where('team_id', $survey->team_id))
             ->get();
 
         return $internal->concat($crossTeam);

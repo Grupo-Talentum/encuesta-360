@@ -11,8 +11,8 @@ class SyncTeamsToTeamRelationsAction
 {
     public function execute(Survey $survey): void
     {
-        $evaluatorIds = Employee::whereIn('team_id', $survey->evaluatorTeams()->pluck('teams.id'))->pluck('id');
-        $evaluateeIds = Employee::where('team_id', $survey->team_id)->pluck('id');
+        $evaluatorIds = Employee::whereIn('team_id', $survey->evaluatorTeams()->pluck('teams.id'))->where('is_active', true)->pluck('id');
+        $evaluateeIds = Employee::where('team_id', $survey->team_id)->where('is_active', true)->pluck('id');
 
         foreach ($evaluatorIds as $evaluatorId) {
             foreach ($evaluateeIds as $evaluateeId) {
