@@ -14,11 +14,11 @@
                 <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Talentum Voice</p>
                 <h1 class="mt-4 text-lg font-bold text-slate-900">{{ $response->npsSurvey->question }}</h1>
 
-                <div class="mt-6 flex flex-wrap gap-2">
+                <div class="mt-6 flex gap-1 overflow-x-auto">
                     @foreach (range(0, 10) as $score)
                         <a
                             href="{{ route('nps.respond', ['token' => $response->token, 'score' => $score]) }}"
-                            class="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-semibold transition {{ $score <= 6 ? 'bg-red-100 text-red-600 hover:bg-red-500 hover:text-white' : ($score <= 8 ? 'bg-amber-50 text-amber-600 hover:bg-amber-500 hover:text-white' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white') }}"
+                            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm font-semibold transition {{ $score <= 6 ? 'bg-red-100 text-red-600 hover:bg-red-500 hover:text-white' : ($score <= 8 ? 'bg-amber-50 text-amber-600 hover:bg-amber-500 hover:text-white' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white') }}"
                         >
                             {{ $score }}
                         </a>
