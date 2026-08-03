@@ -33,7 +33,7 @@ class NpsResponseController extends Controller
     {
         $response = NpsResponse::where('token', $token)->firstOrFail();
 
-        if($response->answered_at != null) abort(404);
+        //if($response->answered_at != null) abort(404);
 
         $requiresComment = $request->filled('score_new') && $request->input('score_new') <= 6;
 
