@@ -37,7 +37,7 @@ class NpsResponseController extends Controller
     {
         $response = NpsResponse::where('token', $token)->firstOrFail();
 
-        abort_unless($response->answered_at, 404);
+        if($response->answered_at != null) abort(404);
 
         $requiresComment = $request->filled('score_new') && $request->input('score_new') <= 6;
 
@@ -49,7 +49,7 @@ class NpsResponseController extends Controller
             'score_new.required' => 'Tu puntuación es imprescindible para continuar.',
         ]);
 
-        $response->update(['comment' => $validated['comment'] ?? '', 'score' => $validated['score_new']]);
+        $response->update(['comment' => $validated['comment'] ?? '', 'score' => $validated['score_new'], 'answered_at' => now()]);
 
         return view('nps.thanks', ['response' => $response]);
     }

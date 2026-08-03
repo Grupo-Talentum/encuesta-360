@@ -7,12 +7,50 @@
     <title>{{ config('app.name') }}</title>
     @vite(['resources/css/app.css'])
     <style>
+        .nps-score-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 4px;
+            margin: 6px auto;
+        }
+
         .nps-score-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: 24px;
+            height: 24px;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border-width: 2px;
+            border-style: solid;
             border-color: transparent;
+            border-radius: 6px;
+            box-sizing: border-box;
         }
 
         .nps-score-label:has(input:checked) {
             border-color: currentColor;
+        }
+
+        @media (min-width: 480px) {
+            .nps-score-label {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .nps-score-label {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -35,30 +73,18 @@
                         tu opinión!</h1>
                     <p class="mt-2 text-slate-500 mt-5">{{ $response->npsSurvey->question }}</p>
                     <form method="POST" action="{{ route('nps.comment', $response->token) }}" class="mt-6 text-center">
-                        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px auto;">
-                            <tr>
-                                @foreach (range(0, 10) as $value)
-                                    <td style="padding:0 2px;">
-                                        <table>
-                                            <tr>
-                                                <td width="28" height="28" align="center" valign="middle"
-                                                    style="padding:2px 1px; width:28px; height:28px; border-radius:6px; background-color:{{ $value <= 6 ? '#fee2e2' : ($value <= 8 ? '#fef3c7' : '#d1fae5') }}; mso-padding-alt:0;">
-                                                    <label class="nps-score-label"
-                                                        style="display:block; width:28px; height:28px; line-height:24px; text-align:center; color:{{ $value <= 6 ? '#b91c1c' : ($value <= 8 ? '#92400e' : '#065f46') }}; font-size:13px; font-weight:600; text-decoration:none; cursor:pointer; border-width:2px; border-style:solid; border-radius:6px; box-sizing:border-box;">
-                                                        <input type="radio" name="score_new"
-                                                            value="{{ $value }}"
-                                                            {{ old('score_new') == $value && old('score_new') !== null ? 'checked' : '' }}
-                                                            style="display:none;">
-                                                        {{ $value }}
-                                                    </label>
-                                                </td>
-
-                                            </tr>
-                                        </table>
-                                    </td>
-                                @endforeach
-                            </tr>
-                        </table>
+                        <div class="nps-score-options">
+                            @foreach (range(0, 10) as $value)
+                                <label class="nps-score-label"
+                                    style="background-color:{{ $value <= 6 ? '#fee2e2' : ($value <= 8 ? '#fef3c7' : '#d1fae5') }}; color:{{ $value <= 6 ? '#b91c1c' : ($value <= 8 ? '#92400e' : '#065f46') }};">
+                                    <input type="radio" name="score_new"
+                                        value="{{ $value }}"
+                                        {{ old('score_new') == $value && old('score_new') !== null ? 'checked' : '' }}
+                                        style="display:none;">
+                                    {{ $value }}
+                                </label>
+                            @endforeach
+                        </div>
                         @error('score_new')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -98,7 +124,7 @@
                         <p class="mt-2 text-slate-500"><b>Gracias por ayudarnos a seguir evolucionando.</b></p>
 
                         <p class="mt-2 text-slate-500"><b>Talentum Voice</b></p>
-                        <p class="mt-2 text-slate-500"></p>Escuchamos para mejorar.</p>
+                        <p class="mt-2 text-slate-500">Escuchamos para mejorar.</p>
                     
                 @endif
             </div>
