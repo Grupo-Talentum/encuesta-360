@@ -57,7 +57,7 @@
 
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 text-slate-900 antialiased">
     <div class="mx-auto max-w-xl px-4 py-16">
-         <img src="{{ asset('images/talentum_voice.png') }}" alt="{{ config('app.name') }}" class="mx-auto mb-8 block h-8">
+         <img src="{{ asset('images/talentum_voice.png') }}" alt="{{ config('app.name') }}" class="mx-auto mb-12 block h-12 mb-4">
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="h-2 bg-indigo-600"></div>
             <div class="p-8 text-center sm:p-10">
@@ -74,19 +74,20 @@
                         tu opinión!</h1>
                     <p class="mt-2 text-slate-500 mt-5">{{ $response->npsSurvey->question }}</p>
                     <form method="POST" action="{{ route('nps.comment', $response->token) }}" class="mt-6 text-center">
+                        @php $preselectedScore = old('score', request()->query('score')); @endphp
                         <div class="nps-score-options">
                             @foreach (range(0, 10) as $value)
                                 <label class="nps-score-label"
                                     style="background-color:{{ $value <= 6 ? '#fee2e2' : ($value <= 8 ? '#fef3c7' : '#d1fae5') }}; color:{{ $value <= 6 ? '#b91c1c' : ($value <= 8 ? '#92400e' : '#065f46') }};">
-                                    <input type="radio" name="score_new"
+                                    <input type="radio" name="score"
                                         value="{{ $value }}"
-                                        {{ old('score_new') == $value && old('score_new') !== null ? 'checked' : '' }}
+                                        {{ $preselectedScore !== null && $preselectedScore == $value ? 'checked' : '' }}
                                         style="display:none;">
                                     {{ $value }}
                                 </label>
                             @endforeach
                         </div>
-                        @error('score_new')
+                        @error('score')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                         @csrf
@@ -132,13 +133,21 @@
         </div>
     </div>
     <script>
-        document.querySelectorAll('input[name="score_new"]').forEach((radio) => {
-            radio.addEventListener('change', () => {
-                const hint = document.getElementById('comment-requirement-hint');
-                hint.textContent = Number(radio.value) <= 6 ?
-                    'Antes de continuar, comparte el motivo de tu valoración.' : '';
-            });
+        const hint = document.getElementById('comment-requirement-hint');
+
+        function updateCommentHint(radio) {
+            hint.textContent = Number(radio.value) <= 6 ?
+                'Antes de continuar, comparte el motivo de tu valoración.' : '';
+        }
+
+        document.querySelectorAll('input[name="score"]').forEach((radio) => {
+            radio.addEventListener('change', () => updateCommentHint(radio));
         });
+
+        const preselectedScoreRadio = document.querySelector('input[name="score"]:checked');
+        if (preselectedScoreRadio) {
+            updateCommentHint(preselectedScoreRadio);
+        }
     </script>
 </body>
 

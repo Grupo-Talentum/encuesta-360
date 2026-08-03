@@ -35,17 +35,17 @@ class NpsResponseController extends Controller
 
         //if($response->answered_at != null) abort(404);
 
-        $requiresComment = $request->filled('score_new') && $request->input('score_new') <= 6;
+        $requiresComment = $request->filled('score') && $request->input('score') <= 6;
 
         $validated = $request->validate([
-            'score_new' => ['required', 'integer', 'between:0,10'],
+            'score' => ['required', 'integer', 'between:0,10'],
             'comment' => [$requiresComment ? 'required' : 'nullable', 'string', 'max:2000'],
         ], [
             'comment.required' => 'Tu comentario es imprescindible para continuar.',
-            'score_new.required' => 'Tu puntuación es imprescindible para continuar.',
+            'score.required' => 'Tu puntuación es imprescindible para continuar.',
         ]);
 
-        $response->update(['comment' => $validated['comment'] ?? '', 'score' => $validated['score_new'], 'answered_at' => now()]);
+        $response->update(['comment' => $validated['comment'] ?? '', 'score' => $validated['score'], 'answered_at' => now()]);
 
         return view('nps.thanks', ['response' => $response]);
     }
