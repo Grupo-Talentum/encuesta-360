@@ -12,11 +12,7 @@ class NpsResponseController extends Controller
     {
         $response = NpsResponse::where('token', $token)->firstOrFail();
 
-        if ($response->answered_at) {
-            return view('nps.thanks', ['response' => $response]);
-        }
-
-        return view('nps.choose', ['response' => $response]);
+        return view('nps.thanks', ['response' => $response]);
     }
 
     public function score(Request $request, string $token): View
