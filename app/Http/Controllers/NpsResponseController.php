@@ -41,7 +41,7 @@ class NpsResponseController extends Controller
             'score' => ['required', 'integer', 'between:0,10'],
             'comment' => [$requiresComment ? 'required' : 'nullable', 'string', 'max:2000'],
         ], [
-            'comment.required' => 'Tu comentario es imprescindible para continuar.',
+            'comment.required' => 'Antes de continuar, comparte el motivo de tu valoración.',
             'score.required' => 'Tu puntuación es imprescindible para continuar.',
         ]);
 
