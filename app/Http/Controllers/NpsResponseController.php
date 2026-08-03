@@ -27,7 +27,7 @@ class NpsResponseController extends Controller
             $score = (int) $request->query('score');
             abort_unless($request->query('score') !== null && $score >= 0 && $score <= 10, 404);
 
-            $response->update(['score' => $score, 'answered_at' => now()]);
+            //$response->update(['score' => $score, 'answered_at' => now()]);
         }
 
         return view('nps.thanks', ['response' => $response]);
@@ -39,9 +39,17 @@ class NpsResponseController extends Controller
 
         abort_unless($response->answered_at, 404);
 
-        $validated = $request->validate(['comment' => ['nullable', 'string', 'max:2000']]);
+        $requiresComment = $request->filled('score_new') && $request->input('score_new') <= 6;
 
-        $response->update(['comment' => $validated['comment'] ?? '']);
+        $validated = $request->validate([
+            'score_new' => ['required', 'integer', 'between:0,10'],
+            'comment' => [$requiresComment ? 'required' : 'nullable', 'string', 'max:2000'],
+        ], [
+            'comment.required' => 'Tu comentario es imprescindible para continuar.',
+            'score_new.required' => 'Tu puntuación es imprescindible para continuar.',
+        ]);
+
+        $response->update(['comment' => $validated['comment'] ?? '', 'score' => $validated['score_new']]);
 
         return view('nps.thanks', ['response' => $response]);
     }
