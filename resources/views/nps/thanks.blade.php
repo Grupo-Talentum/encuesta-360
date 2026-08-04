@@ -133,6 +133,7 @@
         </div>
     </div>
     <script>
+        /*
         const hint = document.getElementById('comment-requirement-hint');
 
         function updateCommentHint(radio) {
@@ -147,7 +148,7 @@
         const preselectedScoreRadio = document.querySelector('input[name="score"]:checked');
         if (preselectedScoreRadio) {
             updateCommentHint(preselectedScoreRadio);
-        }
+        }*/
     </script>
 </body>
 
