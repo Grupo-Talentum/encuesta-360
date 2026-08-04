@@ -94,10 +94,8 @@
                         <p class="mt-2 text-slate-500 mt-8"><b>Escuchar también significa comprender.</b></p>
                         <p class="mt-2 text-slate-500">Cuéntanos brevemente el motivo de tu valoración. Cada comentario
                             nos ayuda a entender mejor tu experiencia y a convertirla en una oportunidad de mejora.</p>
-                        <p class=" mt-8 text-slate-500">
-                            <b><span id="comment-requirement-hint"></span></b>
-                        </p>
-                        <label class="block text-sm font-medium text-slate-700 mt-2">Comentario
+                       
+                        <label class="block text-sm font-medium text-slate-700 mt-2">Comentario <b><span id="comment-requirement-hint"></span></b>
 
                         </label>
                         <textarea name="comment" rows="4"
@@ -133,12 +131,12 @@
         </div>
     </div>
     <script>
-        /*
+        
         const hint = document.getElementById('comment-requirement-hint');
 
         function updateCommentHint(radio) {
             hint.textContent = Number(radio.value) <= 6 ?
-                'Antes de continuar, comparte el motivo de tu valoración.' : '';
+                '(obligatorio).' : '';
         }
 
         document.querySelectorAll('input[name="score"]').forEach((radio) => {
@@ -148,7 +146,7 @@
         const preselectedScoreRadio = document.querySelector('input[name="score"]:checked');
         if (preselectedScoreRadio) {
             updateCommentHint(preselectedScoreRadio);
-        }*/
+        }
     </script>
 </body>
 
